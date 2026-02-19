@@ -100,6 +100,17 @@ const Meeting = () => {
             <button className="absolute top-4 right-4 p-2 rounded-lg glass-dark meeting-text opacity-60 hover:opacity-100 transition-opacity">
               <Maximize className="w-4 h-4" />
             </button>
+            {/* Self mini video — PiP inside active speaker area */}
+            <div className="absolute bottom-4 right-4 w-36 h-24 rounded-xl meeting-surface border meeting-border overflow-hidden shadow-lg">
+              <div className="w-full h-full flex items-center justify-center bg-gradient-to-br from-primary/15 to-accent/15">
+                {videoOn ? (
+                  <span className="text-2xl font-bold meeting-text">{user?.name?.charAt(0).toUpperCase() || "Y"}</span>
+                ) : (
+                  <VideoOff className="w-6 h-6 meeting-text opacity-40" />
+                )}
+              </div>
+              <div className="absolute bottom-1 left-2 text-[10px] meeting-text bg-black/40 px-1.5 py-0.5 rounded">You</div>
+            </div>
           </div>
 
           {/* Participant strip */}
@@ -128,18 +139,6 @@ const Meeting = () => {
           </div>
         </div>
 
-        {/* Self mini video */}
-        <div className="absolute bottom-24 right-4 z-20 w-44 h-32 rounded-xl meeting-surface border meeting-border overflow-hidden shadow-lg">
-          <div className="w-full h-full flex items-center justify-center bg-gradient-to-br from-primary/15 to-accent/15">
-            {videoOn ? (
-              <span className="text-3xl font-bold meeting-text">{user?.name?.charAt(0) || "Y"}</span>
-            ) : (
-              <VideoOff className="w-8 h-8 meeting-text opacity-40" />
-            )}
-          </div>
-          <div className="absolute bottom-1 left-2 text-[10px] meeting-text bg-black/40 px-1.5 py-0.5 rounded">You</div>
-        </div>
-
         {/* Sidebar */}
         <AnimatePresence>
           {sidebarOpen && (
@@ -148,8 +147,9 @@ const Meeting = () => {
               animate={{ width: 320, opacity: 1 }}
               exit={{ width: 0, opacity: 0 }}
               className="meeting-surface border-l meeting-border flex flex-col overflow-hidden"
+              style={{ width: 300 }}
             >
-              <div className="flex gap-1 p-2 border-b meeting-border">
+              <div className="flex gap-1 p-2 border-b meeting-border flex-shrink-0">
                 {["chat", "people", "poll", "ai", "test"].map((tab) => (
                   <button
                     key={tab}
@@ -160,68 +160,69 @@ const Meeting = () => {
                   </button>
                 ))}
               </div>
-              <div className="flex-1 overflow-y-auto p-3">
-                {sidebarTab === "chat" && (
-                  <div className="flex flex-col h-full">
-                    <div className="flex-1 space-y-2 mb-3">
-                      {chatMessages.length === 0 && <p className="text-center text-xs meeting-text opacity-40 py-8">No messages yet</p>}
-                      {chatMessages.map((m, i) => (
-                        <div key={i} className="text-xs">
-                          <span className="font-semibold meeting-text">{m.sender}</span>
-                          <span className="meeting-text opacity-40 ml-2">{m.time}</span>
-                          <p className="meeting-text opacity-80 mt-0.5">{m.text}</p>
-                        </div>
-                      ))}
-                    </div>
-                    <form onSubmit={handleSendChat} className="flex gap-2">
-                      <input
-                        value={chatInput}
-                        onChange={(e) => setChatInput(e.target.value)}
-                        placeholder="Send a message..."
-                        className="flex-1 px-3 py-2 rounded-lg meeting-control meeting-text text-xs border meeting-border focus:outline-none"
-                      />
-                      <button type="submit" className="px-3 py-2 rounded-lg gradient-primary text-primary-foreground text-xs">Send</button>
-                    </form>
-                  </div>
-                )}
-                {sidebarTab === "people" && (
-                  <div className="space-y-2">
-                    {dummyParticipants.map((p) => (
-                      <div key={p.id} className="flex items-center gap-2 p-2 rounded-lg meeting-control">
-                        <div className="w-8 h-8 rounded-full gradient-primary flex items-center justify-center text-xs font-bold text-primary-foreground">{p.name.charAt(0)}</div>
-                        <span className="text-xs meeting-text flex-1">{p.name}{p.isSelf && " (You)"}</span>
-                        {!p.audioOn && <MicOff className="w-3 h-3 text-destructive" />}
-                        {!p.videoOn && <VideoOff className="w-3 h-3 text-muted-foreground" />}
+              {sidebarTab === "chat" ? (
+                <>
+                  <div className="flex-1 overflow-y-auto p-3 space-y-2">
+                    {chatMessages.length === 0 && <p className="text-center text-xs meeting-text opacity-40 py-8">No messages yet</p>}
+                    {chatMessages.map((m, i) => (
+                      <div key={i} className="text-xs">
+                        <span className="font-semibold meeting-text">{m.sender}</span>
+                        <span className="meeting-text opacity-40 ml-2">{m.time}</span>
+                        <p className="meeting-text opacity-80 mt-0.5">{m.text}</p>
                       </div>
                     ))}
                   </div>
-                )}
-                {sidebarTab === "poll" && (
-                  <div className="text-center py-8">
-                    {isTeacher ? (
-                      <button onClick={() => navigate("/poll-create")} className="px-4 py-2 rounded-lg gradient-primary text-primary-foreground text-sm font-medium">Create Poll</button>
-                    ) : (
-                      <p className="text-xs meeting-text opacity-40">No active polls</p>
-                    )}
-                  </div>
-                )}
-                {sidebarTab === "ai" && (
-                  <div className="text-center py-8">
-                    <button onClick={() => navigate("/ai-chat")} className="px-4 py-2 rounded-lg gradient-primary text-primary-foreground text-sm font-medium flex items-center gap-2 mx-auto">
-                      <Bot className="w-4 h-4" /> Open AI Chat
-                    </button>
-                  </div>
-                )}
-                {sidebarTab === "test" && (
-                  <div className="text-center py-8">
-                    {isTeacher ? (
-                      <button onClick={() => navigate("/test-create")} className="px-4 py-2 rounded-lg gradient-primary text-primary-foreground text-sm font-medium">Create Test</button>
-                    ) : (
-                      <p className="text-xs meeting-text opacity-40">No active tests</p>
-                    )}
-                  </div>
-                )}
-              </div>
+                  <form onSubmit={handleSendChat} className="flex gap-2 p-3 border-t meeting-border flex-shrink-0">
+                    <input
+                      value={chatInput}
+                      onChange={(e) => setChatInput(e.target.value)}
+                      placeholder="Send a message..."
+                      className="flex-1 px-3 py-2 rounded-lg meeting-control meeting-text text-xs border meeting-border focus:outline-none"
+                    />
+                    <button type="submit" className="px-3 py-2 rounded-lg gradient-primary text-primary-foreground text-xs">Send</button>
+                  </form>
+                </>
+              ) : (
+                <div className="flex-1 overflow-y-auto p-3">
+                  {sidebarTab === "people" && (
+                    <div className="space-y-2">
+                      {dummyParticipants.map((p) => (
+                        <div key={p.id} className="flex items-center gap-2 p-2 rounded-lg meeting-control">
+                          <div className="w-8 h-8 rounded-full gradient-primary flex items-center justify-center text-xs font-bold text-primary-foreground">{p.name.charAt(0)}</div>
+                          <span className="text-xs meeting-text flex-1">{p.name}{p.isSelf && " (You)"}</span>
+                          {!p.audioOn && <MicOff className="w-3 h-3 text-destructive" />}
+                          {!p.videoOn && <VideoOff className="w-3 h-3 text-muted-foreground" />}
+                        </div>
+                      ))}
+                    </div>
+                  )}
+                  {sidebarTab === "poll" && (
+                    <div className="text-center py-8">
+                      {isTeacher ? (
+                        <button onClick={() => navigate("/poll-create")} className="px-4 py-2 rounded-lg gradient-primary text-primary-foreground text-sm font-medium">Create Poll</button>
+                      ) : (
+                        <p className="text-xs meeting-text opacity-40">No active polls</p>
+                      )}
+                    </div>
+                  )}
+                  {sidebarTab === "ai" && (
+                    <div className="text-center py-8">
+                      <button onClick={() => navigate("/ai-chat")} className="px-4 py-2 rounded-lg gradient-primary text-primary-foreground text-sm font-medium flex items-center gap-2 mx-auto">
+                        <Bot className="w-4 h-4" /> Open AI Chat
+                      </button>
+                    </div>
+                  )}
+                  {sidebarTab === "test" && (
+                    <div className="text-center py-8">
+                      {isTeacher ? (
+                        <button onClick={() => navigate("/test-create")} className="px-4 py-2 rounded-lg gradient-primary text-primary-foreground text-sm font-medium">Create Test</button>
+                      ) : (
+                        <p className="text-xs meeting-text opacity-40">No active tests</p>
+                      )}
+                    </div>
+                  )}
+                </div>
+              )}
             </motion.div>
           )}
         </AnimatePresence>
