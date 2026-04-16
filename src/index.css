@@ -1,0 +1,200 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Space+Grotesk:wght@400;500;600;700&display=swap');
+
+@layer base {
+  :root {
+    --background: 220 20% 97%;
+    --foreground: 220 30% 10%;
+
+    --card: 0 0% 100%;
+    --card-foreground: 220 30% 10%;
+
+    --popover: 0 0% 100%;
+    --popover-foreground: 220 30% 10%;
+
+    --primary: 220 72% 50%;
+    --primary-foreground: 0 0% 100%;
+
+    --secondary: 175 60% 45%;
+    --secondary-foreground: 0 0% 100%;
+
+    --muted: 220 15% 92%;
+    --muted-foreground: 220 10% 45%;
+
+    --accent: 175 60% 45%;
+    --accent-foreground: 0 0% 100%;
+
+    --destructive: 0 72% 55%;
+    --destructive-foreground: 0 0% 100%;
+
+    --border: 220 15% 88%;
+    --input: 220 15% 88%;
+    --ring: 220 72% 50%;
+
+    --radius: 0.75rem;
+
+    --sidebar-background: 220 25% 12%;
+    --sidebar-foreground: 220 15% 90%;
+    --sidebar-primary: 220 72% 50%;
+    --sidebar-primary-foreground: 0 0% 100%;
+    --sidebar-accent: 175 60% 45%;
+    --sidebar-accent-foreground: 0 0% 100%;
+    --sidebar-border: 220 20% 20%;
+    --sidebar-ring: 220 72% 50%;
+
+    /* Custom tokens */
+    --meeting-bg: 220 25% 8%;
+    --meeting-surface: 220 20% 14%;
+    --meeting-border: 220 15% 22%;
+    --meeting-text: 220 15% 90%;
+    --meeting-control: 220 20% 18%;
+    --meeting-control-hover: 220 20% 24%;
+    --meeting-danger: 0 72% 55%;
+
+    --gradient-primary: linear-gradient(135deg, hsl(220, 72%, 50%), hsl(175, 60%, 45%));
+    --gradient-hero: linear-gradient(135deg, hsl(220, 25%, 8%), hsl(220, 30%, 15%));
+    --gradient-card: linear-gradient(145deg, hsl(0, 0%, 100%), hsl(220, 20%, 97%));
+
+    --shadow-sm: 0 2px 8px hsl(220 30% 10% / 0.06);
+    --shadow-md: 0 4px 16px hsl(220 30% 10% / 0.1);
+    --shadow-lg: 0 8px 32px hsl(220 30% 10% / 0.15);
+    --shadow-glow: 0 0 20px hsl(220 72% 50% / 0.3);
+
+    --font-display: 'Space Grotesk', sans-serif;
+    --font-body: 'Inter', sans-serif;
+  }
+
+  .dark {
+    --background: 220 25% 8%;
+    --foreground: 220 15% 90%;
+    --card: 220 20% 14%;
+    --card-foreground: 220 15% 90%;
+    --popover: 220 20% 14%;
+    --popover-foreground: 220 15% 90%;
+    --primary: 220 72% 60%;
+    --primary-foreground: 0 0% 100%;
+    --secondary: 175 60% 50%;
+    --secondary-foreground: 0 0% 100%;
+    --muted: 220 20% 18%;
+    --muted-foreground: 220 10% 55%;
+    --accent: 175 60% 50%;
+    --accent-foreground: 0 0% 100%;
+    --destructive: 0 62.8% 30.6%;
+    --destructive-foreground: 0 0% 100%;
+    --border: 220 15% 22%;
+    --input: 220 15% 22%;
+    --ring: 220 72% 60%;
+    --sidebar-background: 220 25% 6%;
+    --sidebar-foreground: 220 15% 90%;
+    --sidebar-primary: 220 72% 60%;
+    --sidebar-primary-foreground: 0 0% 100%;
+    --sidebar-accent: 175 60% 50%;
+    --sidebar-accent-foreground: 0 0% 100%;
+    --sidebar-border: 220 15% 15%;
+    --sidebar-ring: 220 72% 60%;
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+
+  body {
+    @apply bg-background text-foreground;
+    font-family: var(--font-body);
+  }
+
+  h1, h2, h3, h4, h5, h6 {
+    font-family: var(--font-display);
+  }
+}
+
+@layer utilities {
+  .gradient-primary {
+    background: var(--gradient-primary);
+  }
+
+  .gradient-hero {
+    background: var(--gradient-hero);
+  }
+
+  .gradient-card {
+    background: var(--gradient-card);
+  }
+
+  .shadow-glow {
+    box-shadow: var(--shadow-glow);
+  }
+
+  .meeting-bg {
+    background-color: hsl(var(--meeting-bg));
+  }
+
+  .meeting-surface {
+    background-color: hsl(var(--meeting-surface));
+  }
+
+  .meeting-border {
+    border-color: hsl(var(--meeting-border));
+  }
+
+  .meeting-text {
+    color: hsl(var(--meeting-text));
+  }
+
+  .meeting-control {
+    background-color: hsl(var(--meeting-control));
+  }
+
+  .meeting-control-hover:hover {
+    background-color: hsl(var(--meeting-control-hover));
+  }
+
+  .text-gradient {
+    background: var(--gradient-primary);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+
+  .glass {
+    background: hsl(0 0% 100% / 0.8);
+    backdrop-filter: blur(12px);
+    border: 1px solid hsl(0 0% 100% / 0.2);
+  }
+
+  .glass-dark {
+    background: hsl(220 25% 8% / 0.85);
+    backdrop-filter: blur(12px);
+    border: 1px solid hsl(220 15% 22% / 0.5);
+  }
+
+  .delay-100 {
+    animation-delay: 100ms;
+  }
+
+  .delay-200 {
+    animation-delay: 200ms;
+  }
+}
+
+@layer components {
+  @keyframes bounce-soft {
+    0%, 100% {
+      transform: translateY(0);
+      opacity: 1;
+    }
+    50% {
+      transform: translateY(-6px);
+      opacity: 0.7;
+    }
+  }
+
+  .animate-bounce {
+    animation: bounce-soft 1.4s infinite;
+  }
+}
