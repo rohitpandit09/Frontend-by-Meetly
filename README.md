@@ -105,7 +105,7 @@ Meetly allows teachers to create virtual classrooms and students to join using a
 ### 1. Clone the Repository
 
 ```
-git clone 
+git clone https://github.com/rohitpandit09/Frontend-by-Meetly.git
 ```
 
 ---
@@ -113,7 +113,8 @@ git clone
 ### 2. Setup Backend
 
 ```
-Go to this repo :- 
+Go to this repo :- https://github.com/rohitpandit09/Backend-by-MEETLY.git
+git clone https://github.com/rohitpandit09/Backend-by-MEETLY.git
 npm install
 ```
 
