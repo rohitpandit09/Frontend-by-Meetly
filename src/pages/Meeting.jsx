@@ -862,6 +862,10 @@ const addScreenTrackToPeers = (screenTrack, displayStream) => {
       setChatMessages((prev) => [...prev, msg]);
     };
 
+    const handleExistingMessages = (messages) => {
+      setChatMessages(messages.map(m => ({ ...m, text: m.content })) || []);
+    };
+
     const handleExistingTests = (tests) => {
       setTests(tests || []);
     };
@@ -889,6 +893,7 @@ const addScreenTrackToPeers = (screenTrack, displayStream) => {
     socket.on("poll_created", handlePollCreated);
     socket.on("poll_vote_updated", handlePollVoteUpdate);
     socket.on("receive_message", handleReceiveMessage);
+    socket.on("existing_messages", handleExistingMessages);
     socket.on("existing_tests", handleExistingTests);
     socket.on("test_created", handleTestCreated);
     socket.on("test_submitted", handleTestSubmitted);
@@ -903,6 +908,7 @@ const addScreenTrackToPeers = (screenTrack, displayStream) => {
       socket.off("poll_created", handlePollCreated);
       socket.off("poll_vote_updated", handlePollVoteUpdate);
       socket.off("receive_message", handleReceiveMessage);
+      socket.off("existing_messages", handleExistingMessages);
       socket.off("existing_tests", handleExistingTests);
       socket.off("test_created", handleTestCreated);
       socket.off("test_submitted", handleTestSubmitted);
@@ -924,7 +930,7 @@ const addScreenTrackToPeers = (screenTrack, displayStream) => {
     const chatMessage = {
       classId: id,
       sender: user?.name || "You",
-      text: chatInput,
+      content: chatInput,
       time: new Date().toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" }),
       userId
     };
@@ -1089,7 +1095,7 @@ const addScreenTrackToPeers = (screenTrack, displayStream) => {
                       <div key={i} className="text-xs">
                         <span className="font-semibold meeting-text">{m.sender}</span>
                         <span className="meeting-text opacity-40 ml-2">{m.time}</span>
-                        <p className="meeting-text opacity-80 mt-0.5 break-words">{m.text}</p>
+                        <p className="meeting-text opacity-80 mt-0.5 break-words">{m.content || m.text}</p>
                       </div>
                     ))}
                   </div>
